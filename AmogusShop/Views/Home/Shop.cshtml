@@ -1,0 +1,19 @@
+﻿@model IEnumerable<AmogusShop.Models.AMOGUS>
+@{
+	Layout = "_Layout";		
+}
+<div class="row">
+@foreach(var i in Model)
+{
+    <div class = "col-sm-3">
+        <div class="card" style="width:300px">
+            <img class="card-img-top" src=~/Images/@i.Image alt="Card image" style="width:100%">
+             <div class="card-body">
+                 <h4 class="card-title">@i.Name</h4>
+                 <p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+                 <a href="~/Home/Huindex?id=@i.Id" class="btn btn-primary">@i.Price.ToString("c")</a>
+             </div>
+        </div>
+    </div>
+}
+<div/>

@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>@ViewBag.Title</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+  <div class="container-fluid">
+      <a class="navbar-brand">Amogus Shop</a>
+    <ul class="navbar-nav">
+        @if(User.Identity.IsAuthenticated)
+            {
+       <li class="nav-item">
+         <a class="nav-link">Hello, @User.Identity.Name</a>
+       </li>
+            }
+      <li class="nav-item">
+        <a class="nav-link" href="~/Home/Index">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="~/Home/Shop">Shop</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="~/Home/ShopCart">Shopping cart</a>
+      </li>     
+      @if(!User.Identity.IsAuthenticated)
+      {     
+      <li class="nav-item">
+        <a class="nav-link" href="~/Account/Register">Register</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="~/Account/Login">Log In</a>
+      </li>
+      }
+      @if(User.Identity.IsAuthenticated)
+      {     
+      <li class="nav-item">
+        <a class="nav-link" href="~/Account/Logout">Log Out</a>
+      </li>
+      }
+    </ul>
+  </div>
+</nav>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+<div class="mt-5 p-3 bg-dark text-white">
+  <p class="text-end">AmogusShop 2022-2022</p>
+  <p class="text-end text-secondary">Contacts:<br>
+  Email: saikon1976@gmail.com<br>
+  Phone: +48451199172</p>
+</div>
+</html>

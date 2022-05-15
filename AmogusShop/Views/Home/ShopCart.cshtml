@@ -1,0 +1,30 @@
+﻿@model IEnumerable<AmogusShop.Models.CartItem>
+@{
+    Layout = "_Layout";
+}
+@{float totalprice = 0;}
+@foreach(var i in Model)
+{
+    float price = i.Amogus.Price * i.Amount;
+    totalprice += price;
+    <div class = "container p-2 my-2 border">
+        <div class = "row">
+            <div class = "col-sm-3">
+                <div class="card" style="width:100px">
+                    <img class="card-img-top" src=~/Images/@i.Amogus.Image alt="Card image" style="width:100%">
+                    <div class="card-body">
+                        <h6 class="card-title">@i.Amogus.Name</h6>     
+                        <a href="~/Home/DeleteFromCart?id=@i.Id" class="btn btn-danger">Delete</a>    
+                    </div>
+                </div>
+            </div>
+            <div class = "col-sm-3">
+                <h6>Amount: @i.Amount</h6>
+                <h6>Items price: @price.ToString("c")</h6>
+            </div>
+        </div>
+    </div>   
+}
+<h4 class="text-center">Total price: @totalprice.ToString("c")</h4>
+
+
