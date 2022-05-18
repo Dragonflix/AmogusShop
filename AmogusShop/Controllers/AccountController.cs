@@ -27,6 +27,10 @@ namespace AmogusShop.Controllers
         public async Task<IActionResult> Login(string email, string password, string returnUrl)
         {
             User? user = db.Users.FirstOrDefault(u => u.Email == email);
+            if (user.EmailConfirmed!=1)
+            {
+                return RedirectToRoute("default", new { controller = "Account", action = "Login", alert = "Email wasnt confirmed!" });
+            }
             if (user == null || BCrypt.Net.BCrypt.Verify(password, user.Password) == false)
             {
                 return RedirectToRoute("default", new { controller = "Account", action = "Login", alert = "Incorrect username or password!" });
@@ -73,14 +77,35 @@ namespace AmogusShop.Controllers
                 User user = new User(username, email);
                 string hash = BCrypt.Net.BCrypt.HashPassword(password);
                 user.Password = hash;
+                Random rand = new Random();
+                user.EmailConfirmed = rand.Next(2, 2000000000);
                 db.Users.Add(user);
                 await db.SaveChangesAsync();
+                MailSender.SendVerificationEmail($"https://localhost:7114/Account/ConfirmEmail?id={user.Id}&token={user.EmailConfirmed}", user.Email);
                 return Redirect("~/Account/Login");
             }
             else
             {
                 return RedirectToRoute("default", new { controller = "Account", action = "Register", alert = "User with this email already exists!" });
             }
+        }
+
+        public async Task<IActionResult> ConfirmEmail(int id, int token)
+        {
+            User user = db.Users.FirstOrDefault(u => u.Id == id&&u.EmailConfirmed==token);
+            if(user == null)
+            {
+                ViewBag.Result = "Verification Unsuccessful";
+            }
+            else
+            {
+                user.EmailConfirmed = 1;
+                db.Update(user);
+                await db.SaveChangesAsync();
+                ViewBag.Result = "Verification Successful";
+            }
+            ViewBag.Title = "Email confirmation";
+            return View();
         }
     }
 }

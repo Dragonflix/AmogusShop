@@ -15,5 +15,6 @@ namespace AmogusShop.Models
         public string Email { get; set; }
         public string Password { get; set; } 
         public float Balance { get; set; }
+        public int EmailConfirmed { get; set; }
     }
 }

@@ -39,6 +39,8 @@ namespace AmogusShop.Controllers
                 db.CartItems.Update(item);
                 db.SaveChanges();
             }
+            db.Amogs.FirstOrDefault(i => i.Id == int.Parse(id)).Amount--;
+            db.SaveChanges();
             return Redirect("~/Home/Shop");
         }
 
@@ -78,8 +80,10 @@ namespace AmogusShop.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteFromCart(int? id)
         {
-            var item = db.CartItems.FirstOrDefault(i => i.Id == id);
-            if(item.Amount==1)
+            var IncTable = db.CartItems.Include(i => i.Amogus);
+            var amogus = IncTable.FirstOrDefault(i => i.Id == id).Amogus;
+            var item = db.CartItems.FirstOrDefault(i => i.Id == id);           
+            if (item.Amount==1)
             {
                 db.CartItems.Remove(item);
                 await db.SaveChangesAsync();
@@ -90,6 +94,9 @@ namespace AmogusShop.Controllers
                 db.Update(item);
                 await db.SaveChangesAsync();
             }
+            amogus.Amount++;
+            db.Update(amogus);
+            await db.SaveChangesAsync();
             return Redirect("~/Home/ShopCart");
         }
     }
